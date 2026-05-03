@@ -20,7 +20,6 @@ export default function RegisterPage() {
     role: 'STUDENT' as string,
   });
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -30,7 +29,6 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccess('');
 
     if (form.password !== form.confirmPassword) {
       setError(t('auth.passwordMismatch'));
@@ -49,7 +47,7 @@ export default function RegisterPage() {
         phone: form.phone || undefined,
         authorities: [form.role],
       });
-      setSuccess(t('auth.registered'));
+      navigate('/login?registered=true');
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
@@ -82,17 +80,12 @@ export default function RegisterPage() {
           {error && (
             <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</div>
           )}
-          {success && (
-            <div className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
-              {success}
-            </div>
-          )}
 
           {fields.map((field) => (
             <div key={field.name}>
               <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">
                 {field.label}
-                {!field.required && <span className="text-gray-400 ml-1">({t('common.optional')})</span>}
+                {!field.required && <span className="text-gray-400 ml-1">{t('common.optional')}</span>}
               </label>
               <input
                 id={field.name}
@@ -126,34 +119,21 @@ export default function RegisterPage() {
             </select>
           </div>
 
-          {!success && (
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {loading ? t('auth.registering') : t('auth.register')}
-            </button>
-          )}
-
-          {success && (
-            <Link
-              to="/login"
-              className="block w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white text-center hover:bg-blue-700"
-            >
-              {t('auth.goToLogin')}
-            </Link>
-          )}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading ? t('auth.registering') : t('auth.register')}
+          </button>
         </form>
 
-        {!success && (
-          <p className="text-center text-sm text-gray-500">
-            {t('auth.hasAccount')}{' '}
-            <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
-              {t('auth.login')}
-            </Link>
-          </p>
-        )}
+        <p className="text-center text-sm text-gray-500">
+          {t('auth.hasAccount')}{' '}
+          <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
+            {t('auth.login')}
+          </Link>
+        </p>
 
         <div className="flex justify-center">
           <LanguageSwitcher />
