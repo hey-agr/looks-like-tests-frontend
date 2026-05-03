@@ -42,7 +42,7 @@ export default function AdminUsersPage() {
   });
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div>
       <div className="mb-6 rounded-xl bg-white p-6 shadow">
         <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('common.search')}</h2>
         <div className="flex flex-wrap items-end gap-4">
@@ -145,6 +145,6 @@ export default function AdminUsersPage() {
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }
