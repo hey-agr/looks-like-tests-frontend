@@ -13,6 +13,7 @@ export default defineConfig({
   server: {
     allowedHosts: [
       'screens-reservation-circumstances-ceo.trycloudflare.com',
+      'peninsula-boss-openings-scheduling.trycloudflare.com',
       '.trycloudflare.com',
     ],
     proxy: {
