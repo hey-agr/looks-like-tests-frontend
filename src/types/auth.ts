@@ -14,7 +14,7 @@ export interface LoginDto {
 }
 
 export interface JWTToken {
-  token: string;
+  value: string;
 }
 
 export interface UserResource {
