@@ -14,6 +14,10 @@ export function showToast(message: string, type: 'success' | 'error' = 'success'
   listeners.forEach((fn) => fn(toast));
 }
 
+export function useToast() {
+  return { showToast };
+}
+
 export default function ToastContainer() {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
