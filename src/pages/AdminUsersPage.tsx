@@ -1,13 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import { usersApi } from '@/api/users';
+import { useState, useEffect } from 'react';
 import { ROLE_LABELS, ROLE_COLORS } from '@/types/auth';
+import { usersApi } from '@/api/users';
 import type { UserResource } from '@/types/auth';
 
 export default function AdminUsersPage() {
-  const { user, logout } = useAuth();
-
   const [users, setUsers] = useState<UserResource[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -20,27 +18,26 @@ export default function AdminUsersPage() {
     setError('');
     usersApi
       .getFiltered({ page: 0, size: 200 })
-      .then((res) => setUsers(res.data.users || []))
+      .then((res) => {
+        setUsers(res.data.users || []);
+        setTotal(res.data.totalElements || 0);
+      })
       .catch(() => setError('Ошибка загрузки пользователей'))
       .finally(() => setLoading(false));
   }, []);
 
-  const filtered = useMemo(() => {
-    return users.filter((u) => {
-      const userRole = u.authorities?.[0] || '';
-      if (search && !u.username.toLowerCase().includes(search.toLowerCase()) &&
-          !u.lastName?.toLowerCase().includes(search.toLowerCase()) &&
-          !u.firstName?.toLowerCase().includes(search.toLowerCase())) {
-        return false;
-      }
-      if (roleFilter && userRole !== roleFilter) return false;
-      if (statusFilter === 'active' && !u.activated) return false;
-      if (statusFilter === 'inactive' && u.activated) return false;
-      return true;
-    });
-  }, [users, search, roleFilter, statusFilter]);
-
-  const primaryRole = user?.authorities?.[0] || '';
+  const filtered = users.filter((u) => {
+    const userRole = u.authorities?.[0] || '';
+    if (search && !u.username.toLowerCase().includes(search.toLowerCase()) &&
+        !u.lastName?.toLowerCase().includes(search.toLowerCase()) &&
+        !u.firstName?.toLowerCase().includes(search.toLowerCase())) {
+      return false;
+    }
+    if (roleFilter && userRole !== roleFilter) return false;
+    if (statusFilter === 'active' && !u.activated) return false;
+    if (statusFilter === 'inactive' && u.activated) return false;
+    return true;
+  });
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { usersApi } from '@/api/users';
 import { ROLE_LABELS } from '@/types/auth';
@@ -148,7 +149,13 @@ export default function ProfilePage() {
               />
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-3">
+              <Link
+                to="/"
+                className="rounded-lg border border-gray-300 px-6 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Назад
+              </Link>
               <button
                 type="submit"
                 disabled={saving}
