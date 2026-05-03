@@ -11,6 +11,10 @@ export default defineConfig({
     },
   },
   server: {
+    allowedHosts: [
+      'screens-reservation-circumstances-ceo.trycloudflare.com',
+      '.trycloudflare.com',
+    ],
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
