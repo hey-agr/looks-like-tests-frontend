@@ -4,7 +4,7 @@ import { assignationsApi } from '@/api/assignations';
 import type { UserResource } from '@/types/auth';
 import { useI18n } from '@/i18n/I18nProvider';
 import { showToast } from '@/components/Toast';
-import AppLayout from '@/components/AppLayout';
+
 
 export default function AssignStudentsPage() {
   const { t } = useI18n();
@@ -63,8 +63,7 @@ export default function AssignStudentsPage() {
   }
 
   return (
-    <AppLayout>
-      <div>
+    <div>
       <div className="rounded-xl bg-white p-6 shadow">
         <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('assign.title')}</h2>
 
@@ -113,6 +112,5 @@ export default function AssignStudentsPage() {
         </div>
       </div>
     </div>
-    </AppLayout>
   );
 }
