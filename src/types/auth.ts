@@ -61,3 +61,23 @@ export const ROLE_COLORS: Record<string, string> = {
   SUPERVISOR: 'bg-orange-100 text-orange-800',
   STUDENT: 'bg-green-100 text-green-800',
 };
+
+
+export function getRoleLabel(role: string, t: (key: string) => string): string {
+  const keyMap: Record<string, string> = {
+    ADMIN: 'auth.roleAdmin',
+    TEACHER: 'auth.roleTeacher',
+    SUPERVISOR: 'auth.roleSupervisor',
+    STUDENT: 'auth.roleStudent',
+  };
+  const key = keyMap[role];
+  if (key) {
+    const label = t(key);
+    if (label !== key) return label;
+  }
+  return ROLE_LABELS[role] ?? role;
+}
+
+export function getRoleColor(role: string): string {
+  return ROLE_COLORS[role] ?? '';
+}

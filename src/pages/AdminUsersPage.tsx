@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ROLE_LABELS, ROLE_COLORS } from '@/types/auth';
+import { ROLE_COLORS, getRoleLabel } from '@/types/auth';
 import { useI18n } from '@/i18n/I18nProvider';
 import { usersApi } from '@/api/users';
 import type { UserResource } from '@/types/auth';
@@ -128,7 +128,7 @@ export default function AdminUsersPage() {
                       <td className="px-6 py-4 text-gray-500">{u.phone || '—'}</td>
                       <td className="px-6 py-4">
                         <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${ROLE_COLORS[userRole] ?? ''}`}>
-                          {ROLE_LABELS[userRole] ?? userRole}
+                          {getRoleLabel(userRole, t)}
                         </span>
                       </td>
                       <td className="px-6 py-4">

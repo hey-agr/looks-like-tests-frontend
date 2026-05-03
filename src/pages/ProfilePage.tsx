@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useI18n, LanguageSwitcher } from '@/i18n/I18nProvider';
 import { useAuth } from '@/context/AuthContext';
 import { usersApi } from '@/api/users';
-import { ROLE_LABELS } from '@/types/auth';
+import { getRoleLabel } from '@/types/auth';
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
@@ -77,7 +77,7 @@ export default function ProfilePage() {
                 <p className="font-medium text-gray-900">{user?.username}</p>
               </div>
               <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
-                {ROLE_LABELS[primaryRole] ?? primaryRole}
+                {getRoleLabel(primaryRole, t)}
               </span>
             </div>
           </div>

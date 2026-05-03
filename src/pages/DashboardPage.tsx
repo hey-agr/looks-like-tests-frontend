@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { ROLE_LABELS } from '@/types/auth';
+import { getRoleLabel } from '@/types/auth';
 import { useI18n, LanguageSwitcher } from '@/i18n/I18nProvider';
 import AdminUsersPage from './AdminUsersPage';
 
@@ -54,7 +54,7 @@ export default function DashboardPage() {
                   <p className="text-sm font-medium text-gray-900">
                     {user?.lastName} {user?.firstName}
                   </p>
-                  <p className="text-xs text-gray-500">{ROLE_LABELS[primaryRole] ?? primaryRole}</p>
+                  <p className="text-xs text-gray-500">{getRoleLabel(primaryRole, t)}</p>
                 </div>
                 <div className="py-1">
                   <Link
@@ -87,17 +87,9 @@ export default function DashboardPage() {
               {t('welcome')}, {user?.firstName}!
             </h2>
             <p className="mt-2 text-gray-600">
-              {t('welcome.role')}: {ROLE_LABELS[primaryRole] ?? primaryRole}
+              {t('welcome.role')}: {getRoleLabel(primaryRole, t)}
             </p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <Link
-                to="/profile"
-                className="block rounded-lg border border-gray-200 p-4 transition hover:border-blue-300 hover:shadow-sm"
-              >
-                <h3 className="font-medium text-gray-900">{t('profile')}</h3>
-                <p className="mt-1 text-sm text-gray-500">{t('profile.edit')}</p>
-              </Link>
-            </div>
+
           </div>
         </main>
       )}
