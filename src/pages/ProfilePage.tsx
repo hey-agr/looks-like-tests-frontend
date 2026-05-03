@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { usersApi } from '@/api/users';
+import { ROLE_LABELS } from '@/types/auth';
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
 
   const [form, setForm] = useState({
-    firstname: user?.firstname ?? '',
-    lastname: user?.lastname ?? '',
-    middlename: user?.middlename ?? '',
+    firstName: user?.firstName ?? '',
+    lastName: user?.lastName ?? '',
+    middleName: user?.middleName ?? '',
     email: user?.email ?? '',
+    phone: user?.phone ?? '',
   });
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState('');
@@ -26,10 +28,11 @@ export default function ProfilePage() {
     setSaving(true);
     try {
       await usersApi.updateCurrent({
-        firstname: form.firstname,
-        lastname: form.lastname,
-        middlename: form.middlename || undefined,
+        firstName: form.firstName,
+        lastName: form.lastName,
+        middleName: form.middleName || undefined,
         email: form.email,
+        phone: form.phone || undefined,
       });
       setSuccess('Профиль обновлён');
     } catch {
@@ -39,11 +42,7 @@ export default function ProfilePage() {
     }
   };
 
-  const ROLE_LABELS: Record<string, string> = {
-    ADMIN: 'Администратор',
-    TEACHER: 'Учитель',
-    STUDENT: 'Студент',
-  };
+  const primaryRole = user?.authorities?.[0] || '';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -52,7 +51,7 @@ export default function ProfilePage() {
           <h1 className="text-xl font-bold text-gray-900">Мой профиль</h1>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600">
-              {user?.lastname} {user?.firstname}
+              {user?.lastName} {user?.firstName}
             </span>
             <button
               onClick={logout}
@@ -70,11 +69,11 @@ export default function ProfilePage() {
           <div className="mb-6 rounded-lg bg-gray-50 p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Имя пользователя</p>
+                <p className="text-sm text-gray-500">Email (логин)</p>
                 <p className="font-medium text-gray-900">{user?.username}</p>
               </div>
               <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
-                {ROLE_LABELS[user?.role ?? ''] ?? user?.role}
+                {ROLE_LABELS[primaryRole] ?? primaryRole}
               </span>
             </div>
           </div>
@@ -84,22 +83,18 @@ export default function ProfilePage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {success && (
-              <div className="rounded-lg bg-green-50 p-3 text-sm text-green-600">
-                {success}
-              </div>
+              <div className="rounded-lg bg-green-50 p-3 text-sm text-green-600">{success}</div>
             )}
             {error && (
-              <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
-                {error}
-              </div>
+              <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</div>
             )}
 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">Фамилия</label>
                 <input
-                  name="lastname"
-                  value={form.lastname}
+                  name="lastName"
+                  value={form.lastName}
                   onChange={handleChange}
                   required
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -108,8 +103,8 @@ export default function ProfilePage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700">Имя</label>
                 <input
-                  name="firstname"
-                  value={form.firstname}
+                  name="firstName"
+                  value={form.firstName}
                   onChange={handleChange}
                   required
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -120,8 +115,8 @@ export default function ProfilePage() {
             <div>
               <label className="block text-sm font-medium text-gray-700">Отчество</label>
               <input
-                name="middlename"
-                value={form.middlename}
+                name="middleName"
+                value={form.middleName}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
@@ -135,6 +130,20 @@ export default function ProfilePage() {
                 value={form.email}
                 onChange={handleChange}
                 required
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Телефон <span className="text-gray-400 ml-1">(необязательно)</span>
+              </label>
+              <input
+                name="phone"
+                type="tel"
+                value={form.phone}
+                onChange={handleChange}
+                placeholder="+7 (999) 123-45-67"
                 className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>

@@ -10,6 +10,6 @@ export const usersApi = {
   getCurrent: () =>
     apiClient.get<UserResource>('/user'),
 
-  updateCurrent: (data: Partial<Pick<UserResource, 'firstname' | 'lastname' | 'middlename' | 'email'>>) =>
+  updateCurrent: (data: Record<string, string | undefined>) =>
     apiClient.patch<UserResource>('/user', data),
 };

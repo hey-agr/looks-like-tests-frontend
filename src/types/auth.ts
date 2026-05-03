@@ -5,6 +5,7 @@ export interface UserCreateDto {
   firstName: string;
   lastName: string;
   middleName?: string;
+  phone?: string;
   authorities: string[];
 }
 
@@ -21,41 +22,42 @@ export interface UserResource {
   id: number;
   username: string;
   email: string;
-  firstname: string;
-  lastname: string;
-  middlename?: string;
-  role: 'STUDENT' | 'TEACHER' | 'ADMIN';
-  active: boolean;
+  firstName: string;
+  lastName: string;
+  middleName: string | null;
+  phone: string | null;
+  activated: boolean;
+  authorities: string[];
 }
 
 export interface UserUpdateDto {
-  firstname?: string;
-  lastname?: string;
-  middlename?: string;
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
   email?: string;
-}
-
-export interface UserResource {
-  id: number;
-  username: string;
-  email: string;
-  firstname: string;
-  lastname: string;
-  middlename?: string;
-  role: 'STUDENT' | 'TEACHER' | 'ADMIN';
-  active: boolean;
+  phone?: string;
 }
 
 export interface UsersFilter {
   username?: string;
-  role?: 'STUDENT' | 'TEACHER' | 'ADMIN';
+  authority?: string;
   active?: boolean;
   page?: number;
   size?: number;
 }
 
-export interface ApiError {
-  message: string;
-  status: number;
-  timestamp: string;
-}
+export type UserRole = 'ADMIN' | 'TEACHER' | 'SUPERVISOR' | 'STUDENT';
+
+export const ROLE_LABELS: Record<string, string> = {
+  ADMIN: 'Администратор',
+  TEACHER: 'Учитель',
+  SUPERVISOR: 'Наблюдатель',
+  STUDENT: 'Студент',
+};
+
+export const ROLE_COLORS: Record<string, string> = {
+  ADMIN: 'bg-purple-100 text-purple-800',
+  TEACHER: 'bg-blue-100 text-blue-800',
+  SUPERVISOR: 'bg-orange-100 text-orange-800',
+  STUDENT: 'bg-green-100 text-green-800',
+};

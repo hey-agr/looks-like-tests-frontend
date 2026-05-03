@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { ROLE_LABELS, ROLE_COLORS } from '@/types/auth';
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
+  const primaryRole = user?.authorities?.[0] || 'STUDENT';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -10,14 +12,11 @@ export default function DashboardPage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <h1 className="text-xl font-bold text-gray-900">Looks Like Tests</h1>
           <div className="flex items-center gap-4">
-            <Link
-              to="/profile"
-              className="text-sm text-gray-600 hover:text-gray-900"
-            >
-              {user?.lastname} {user?.firstname}
+            <Link to="/profile" className="text-sm text-gray-600 hover:text-gray-900">
+              {user?.lastName} {user?.firstName}
             </Link>
-            <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
-              {user?.role === 'ADMIN' ? 'Администратор' : user?.role === 'TEACHER' ? 'Учитель' : 'Студент'}
+            <span className={`rounded-full px-3 py-1 text-xs font-medium ${ROLE_COLORS[primaryRole] ?? ''}`}>
+              {ROLE_LABELS[primaryRole] ?? primaryRole}
             </span>
             <button
               onClick={logout}
@@ -32,10 +31,10 @@ export default function DashboardPage() {
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="rounded-xl bg-white p-6 shadow">
           <h2 className="text-lg font-semibold text-gray-900">
-            Добро пожаловать, {user?.firstname}!
+            Добро пожаловать, {user?.firstName}!
           </h2>
           <p className="mt-2 text-gray-600">
-            Ваша роль: {user?.role === 'ADMIN' ? 'Администратор' : user?.role === 'TEACHER' ? 'Учитель' : 'Студент'}
+            Роль: {ROLE_LABELS[primaryRole] ?? primaryRole}
           </p>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -47,7 +46,7 @@ export default function DashboardPage() {
               <p className="mt-1 text-sm text-gray-500">Редактировать профиль</p>
             </Link>
 
-            {user?.role === 'ADMIN' && (
+            {primaryRole === 'ADMIN' && (
               <Link
                 to="/admin/users"
                 className="block rounded-lg border border-gray-200 p-4 transition hover:border-purple-300 hover:shadow-sm"
