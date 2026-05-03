@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { useI18n, LanguageSwitcher } from '@/i18n/I18nProvider';
 
 const ROLES = ['TEACHER', 'SUPERVISOR', 'STUDENT'] as const;
 
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { register } = useAuth();
+  const { t } = useI18n();
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -31,7 +33,7 @@ export default function RegisterPage() {
     setSuccess('');
 
     if (form.password !== form.confirmPassword) {
-      setError('Пароли не совпадают');
+      setError(t('auth.passwordMismatch'));
       return;
     }
 
@@ -47,11 +49,11 @@ export default function RegisterPage() {
         phone: form.phone || undefined,
         authorities: [form.role],
       });
-      setSuccess('Вы успешно зарегистрировались! Теперь можете войти.');
+      setSuccess(t('auth.registered'));
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        'Ошибка регистрации. Попробуйте снова.';
+        (t('auth.registerError') !== 'auth.registerError' ? t('auth.registerError') : 'Registration error. Try again.');
       setError(msg);
     } finally {
       setLoading(false);
@@ -59,21 +61,21 @@ export default function RegisterPage() {
   };
 
   const fields = [
-    { name: 'email', label: 'Email', type: 'email', required: true, placeholder: 'email@example.com' },
-    { name: 'lastname', label: 'Фамилия', type: 'text', required: true, placeholder: '' },
-    { name: 'firstname', label: 'Имя', type: 'text', required: true, placeholder: '' },
-    { name: 'middlename', label: 'Отчество', type: 'text', required: false, placeholder: '' },
-    { name: 'phone', label: 'Телефон', type: 'tel', required: false, placeholder: '+7 (999) 123-45-67' },
-    { name: 'password', label: 'Пароль', type: 'password', required: true, placeholder: '••••••••' },
-    { name: 'confirmPassword', label: 'Подтверждение пароля', type: 'password', required: true, placeholder: '••••••••' },
+    { name: 'email', label: t('auth.email'), type: 'email', required: true, placeholder: 'email@example.com' },
+    { name: 'lastname', label: t('profile.lastName'), type: 'text', required: true, placeholder: '' },
+    { name: 'firstname', label: t('profile.firstName'), type: 'text', required: true, placeholder: '' },
+    { name: 'middlename', label: t('profile.middleName'), type: 'text', required: false, placeholder: '' },
+    { name: 'phone', label: t('profile.phone'), type: 'tel', required: false, placeholder: '+7 (999) 123-45-67' },
+    { name: 'password', label: t('auth.password'), type: 'password', required: true, placeholder: '••••••••' },
+    { name: 'confirmPassword', label: t('auth.confirmPassword'), type: 'password', required: true, placeholder: '••••••••' },
   ];
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-8">
       <div className="w-full max-w-md space-y-6 rounded-xl bg-white p-8 shadow-lg">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Регистрация</h1>
-          <p className="mt-2 text-sm text-gray-500">Создайте новую учётную запись</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('app.title')}</h1>
+          <p className="mt-2 text-sm text-gray-500">{t('auth.registerTitle')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -90,7 +92,7 @@ export default function RegisterPage() {
             <div key={field.name}>
               <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">
                 {field.label}
-                {!field.required && <span className="text-gray-400 ml-1">(необязательно)</span>}
+                {!field.required && <span className="text-gray-400 ml-1">({t('common.optional')})</span>}
               </label>
               <input
                 id={field.name}
@@ -107,7 +109,7 @@ export default function RegisterPage() {
 
           <div>
             <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-              Роль
+              {t('auth.role')}
             </label>
             <select
               id="role"
@@ -118,7 +120,7 @@ export default function RegisterPage() {
             >
               {ROLES.map((role) => (
                 <option key={role} value={role}>
-                  {role === 'TEACHER' ? 'Учитель' : role === 'SUPERVISOR' ? 'Наблюдатель' : 'Студент'}
+                  {role === 'TEACHER' ? t('auth.roleTeacher') : role === 'SUPERVISOR' ? t('auth.roleSupervisor') : t('auth.roleStudent')}
                 </option>
               ))}
             </select>
@@ -130,7 +132,7 @@ export default function RegisterPage() {
               disabled={loading}
               className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading ? 'Регистрация...' : 'Зарегистрироваться'}
+              {loading ? t('auth.registering') : t('auth.register')}
             </button>
           )}
 
@@ -139,19 +141,23 @@ export default function RegisterPage() {
               to="/login"
               className="block w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white text-center hover:bg-blue-700"
             >
-              Перейти ко входу
+              {t('auth.goToLogin')}
             </Link>
           )}
         </form>
 
         {!success && (
           <p className="text-center text-sm text-gray-500">
-            Уже есть аккаунт?{' '}
+            {t('auth.hasAccount')}{' '}
             <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
-              Войти
+              {t('auth.login')}
             </Link>
           </p>
         )}
+
+        <div className="flex justify-center">
+          <LanguageSwitcher />
+        </div>
       </div>
     </div>
   );

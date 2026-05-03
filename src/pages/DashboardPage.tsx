@@ -62,13 +62,13 @@ export default function DashboardPage() {
                     onClick={() => setMenuOpen(false)}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                   >
-                    Профиль
+                    {t('profile')}
                   </Link>
                   <button
                     onClick={() => { setMenuOpen(false); logout(); }}
                     className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
                   >
-                    Выйти
+                    {t('auth.logout')}
                   </button>
                 </div>
               </div>
@@ -84,18 +84,18 @@ export default function DashboardPage() {
         <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="rounded-xl bg-white p-6 shadow">
             <h2 className="text-lg font-semibold text-gray-900">
-              Добро пожаловать, {user?.firstName}!
+              {t('welcome')}, {user?.firstName}!
             </h2>
             <p className="mt-2 text-gray-600">
-              Роль: {ROLE_LABELS[primaryRole] ?? primaryRole}
+              {t('welcome.role')}: {ROLE_LABELS[primaryRole] ?? primaryRole}
             </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Link
                 to="/profile"
                 className="block rounded-lg border border-gray-200 p-4 transition hover:border-blue-300 hover:shadow-sm"
               >
-                <h3 className="font-medium text-gray-900">Профиль</h3>
-                <p className="mt-1 text-sm text-gray-500">Редактировать профиль</p>
+                <h3 className="font-medium text-gray-900">{t('profile')}</h3>
+                <p className="mt-1 text-sm text-gray-500">{t('profile.edit')}</p>
               </Link>
             </div>
           </div>

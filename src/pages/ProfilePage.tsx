@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useI18n, LanguageSwitcher } from '@/i18n/I18nProvider';
 import { useAuth } from '@/context/AuthContext';
 import { usersApi } from '@/api/users';
 import { ROLE_LABELS } from '@/types/auth';
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
+  const { t } = useI18n();
 
   const [form, setForm] = useState({
     firstName: user?.firstName ?? '',
@@ -35,9 +37,9 @@ export default function ProfilePage() {
         email: form.email,
         phone: form.phone || undefined,
       });
-      setSuccess('Профиль обновлён');
+      setSuccess(t('profile.saved'));
     } catch {
-      setError('Ошибка обновления профиля');
+      setError(t('profile.error'));
     } finally {
       setSaving(false);
     }
@@ -49,8 +51,9 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <h1 className="text-xl font-bold text-gray-900">Мой профиль</h1>
+          <h1 className="text-xl font-bold text-gray-900">{t('profile.title')}</h1>
           <div className="flex items-center gap-4">
+            <LanguageSwitcher />
             <span className="text-sm text-gray-600">
               {user?.lastName} {user?.firstName}
             </span>
@@ -58,7 +61,7 @@ export default function ProfilePage() {
               onClick={logout}
               className="rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-200"
             >
-              Выйти
+              {t('auth.logout')}
             </button>
           </div>
         </div>
@@ -70,7 +73,7 @@ export default function ProfilePage() {
           <div className="mb-6 rounded-lg bg-gray-50 p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Email (логин)</p>
+                <p className="text-sm text-gray-500">{t('profile.email')}</p>
                 <p className="font-medium text-gray-900">{user?.username}</p>
               </div>
               <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
@@ -80,7 +83,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Edit form */}
-          <h2 className="mb-4 text-lg font-semibold text-gray-900">Редактировать профиль</h2>
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('profile.edit')}</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {success && (
@@ -92,7 +95,7 @@ export default function ProfilePage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Фамилия</label>
+                <label className="block text-sm font-medium text-gray-700">{t('profile.lastName')}</label>
                 <input
                   name="lastName"
                   value={form.lastName}
@@ -102,7 +105,7 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Имя</label>
+                <label className="block text-sm font-medium text-gray-700">{t('profile.firstName')}</label>
                 <input
                   name="firstName"
                   value={form.firstName}
@@ -114,7 +117,7 @@ export default function ProfilePage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Отчество</label>
+              <label className="block text-sm font-medium text-gray-700">{t('profile.middleName')}</label>
               <input
                 name="middleName"
                 value={form.middleName}
@@ -124,7 +127,7 @@ export default function ProfilePage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <label className="block text-sm font-medium text-gray-700">{t('auth.email')}</label>
               <input
                 name="email"
                 type="email"
@@ -154,14 +157,14 @@ export default function ProfilePage() {
                 to="/"
                 className="rounded-lg border border-gray-300 px-6 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
-                Назад
+                {t('common.back')}
               </Link>
               <button
                 type="submit"
                 disabled={saving}
                 className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {saving ? 'Сохранение...' : 'Сохранить'}
+                {saving ? t('profile.saving') : t('profile.save')}
               </button>
             </div>
           </form>
