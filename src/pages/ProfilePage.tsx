@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useI18n, LanguageSwitcher } from '@/i18n/I18nProvider';
 import { useAuth } from '@/context/AuthContext';
-import { usersApi } from '@/api/users';
+import { useI18n } from '@/i18n/I18nProvider';
+import AppLayout from '@/components/AppLayout';
 import { getRoleLabel } from '@/types/auth';
+import { usersApi } from '@/api/users';
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
   const { t } = useI18n();
+  const primaryRole = user?.authorities?.[0] || '';
 
   const [form, setForm] = useState({
     firstName: user?.firstName ?? '',
@@ -45,31 +47,10 @@ export default function ProfilePage() {
     }
   };
 
-  const primaryRole = user?.authorities?.[0] || '';
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <h1 className="text-xl font-bold text-gray-900">{t('profile.title')}</h1>
-          <div className="flex items-center gap-4">
-            <LanguageSwitcher />
-            <span className="text-sm text-gray-600">
-              {user?.lastName} {user?.firstName}
-            </span>
-            <button
-              onClick={logout}
-              className="rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-200"
-            >
-              {t('auth.logout')}
-            </button>
-          </div>
-        </div>
-      </header>
-
+    <AppLayout>
       <main className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="rounded-xl bg-white p-8 shadow">
-          {/* User info */}
           <div className="mb-6 rounded-lg bg-gray-50 p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -82,7 +63,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Edit form */}
           <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('profile.edit')}</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -140,7 +120,7 @@ export default function ProfilePage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Телефон <span className="text-gray-400 ml-1">(необязательно)</span>
+                {t('profile.phone')} <span className="text-gray-400 ml-1">{t('common.optional')}</span>
               </label>
               <input
                 name="phone"
@@ -170,6 +150,6 @@ export default function ProfilePage() {
           </form>
         </div>
       </main>
-    </div>
+    </AppLayout>
   );
 }
