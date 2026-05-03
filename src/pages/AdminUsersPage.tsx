@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ROLE_COLORS, getRoleLabel } from '@/types/auth';
 import { useI18n } from '@/i18n/I18nProvider';
+import AppLayout from '@/components/AppLayout';
 import { usersApi } from '@/api/users';
 import type { UserResource } from '@/types/auth';
 
@@ -42,7 +43,8 @@ export default function AdminUsersPage() {
   });
 
   return (
-    <div>
+    <AppLayout>
+      <div>
       <div className="mb-6 rounded-xl bg-white p-6 shadow">
         <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('common.search')}</h2>
         <div className="flex flex-wrap items-end gap-4">
@@ -146,5 +148,6 @@ export default function AdminUsersPage() {
         )}
       </div>
     </div>
+    </AppLayout>
   );
 }

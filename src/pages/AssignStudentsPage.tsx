@@ -3,6 +3,7 @@ import { usersApi } from '@/api/users';
 import { assignationsApi } from '@/api/assignations';
 import type { UserResource } from '@/types/auth';
 import { useI18n } from '@/i18n/I18nProvider';
+import AppLayout from '@/components/AppLayout';
 
 export default function AssignStudentsPage() {
   const { t } = useI18n();
@@ -63,7 +64,8 @@ export default function AssignStudentsPage() {
   }
 
   return (
-    <div>
+    <AppLayout>
+      <div>
       <div className="rounded-xl bg-white p-6 shadow">
         <h2 className="mb-4 text-lg font-semibold text-gray-900">Назначение студентов учителям</h2>
 
@@ -117,5 +119,6 @@ export default function AssignStudentsPage() {
         </div>
       </div>
     </div>
+    </AppLayout>
   );
 }
