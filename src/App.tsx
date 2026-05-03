@@ -5,8 +5,6 @@ import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import DashboardPage from '@/pages/DashboardPage';
 import ProfilePage from '@/pages/ProfilePage';
-import AdminUsersPage from '@/pages/AdminUsersPage';
-
 export default function App() {
   return (
     <BrowserRouter>
@@ -27,14 +25,6 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <ProfilePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/users"
-            element={
-              <ProtectedRoute>
-                <AdminUsersPage />
               </ProtectedRoute>
             }
           />
