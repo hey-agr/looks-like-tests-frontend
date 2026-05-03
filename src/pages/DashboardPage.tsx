@@ -2,10 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { ROLE_LABELS } from '@/types/auth';
+import { useI18n, LanguageSwitcher } from '@/i18n/I18nProvider';
 import AdminUsersPage from './AdminUsersPage';
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
+  const { t } = useI18n();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const primaryRole = user?.authorities?.[0] || '';
@@ -28,15 +30,17 @@ export default function DashboardPage() {
       <header className="bg-white shadow">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold text-gray-900">Looks Like Tests</h1>
+            <h1 className="text-xl font-bold text-gray-900">{t('app.title')}</h1>
             {isAdmin && (
               <span className="rounded-full px-3 py-1 text-xs font-medium bg-purple-100 text-purple-800">
-                Админ-панель
+                {t('app.admin')}
               </span>
             )}
           </div>
 
-          <div className="relative" ref={menuRef}>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+            <div className="relative" ref={menuRef}>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white hover:bg-blue-700 focus:outline-none"
@@ -69,6 +73,7 @@ export default function DashboardPage() {
                 </div>
               </div>
             )}
+          </div>
           </div>
         </div>
       </header>
