@@ -34,8 +34,6 @@ export default function AssignStudentsPage() {
 
   const handleAssign = async () => {
     if (!selectedStudent || !selectedTeacher) return;
-    setError('');
-    setSuccess('');
     setSaving(true);
     try {
       await assignationsApi.createStudentToTeacher({
