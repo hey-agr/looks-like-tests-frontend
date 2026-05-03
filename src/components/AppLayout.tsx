@@ -37,6 +37,47 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             )}
           </Link>
 
+          <nav className="hidden md:flex items-center gap-6 ml-8 flex-1">
+            <Link 
+              to="/" 
+              className="text-sm font-medium text-gray-600 hover:text-blue-600 transition"
+            >
+              {t('common.dashboard')}
+            </Link>
+            {isAdmin && (
+              <Link 
+                to="/admin/users" 
+                className="text-sm font-medium text-gray-600 hover:text-blue-600 transition"
+              >
+                {t('users.title')}
+              </Link>
+            )}
+            {(isAdmin || primaryRole === 'SUPERVISOR') && (
+              <Link 
+                to={isAdmin ? "/admin/assignments" : "/supervisor"} 
+                className="text-sm font-medium text-gray-600 hover:text-blue-600 transition"
+              >
+                {t('assign.title')}
+              </Link>
+            )}
+            {primaryRole === 'TEACHER' && (
+              <Link 
+                to="/teacher/tests" 
+                className="text-sm font-medium text-gray-600 hover:text-blue-600 transition"
+              >
+                {t('tests.title')}
+              </Link>
+            )}
+            {primaryRole === 'STUDENT' && (
+              <Link 
+                to="/student/tests" 
+                className="text-sm font-medium text-gray-600 hover:text-blue-600 transition"
+              >
+                {t('tests.title')}
+              </Link>
+            )}
+          </nav>
+
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <div className="relative" ref={menuRef}>

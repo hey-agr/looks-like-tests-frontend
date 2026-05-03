@@ -8,6 +8,8 @@ import ProfilePage from '@/pages/ProfilePage';
 import AdminUsersPage from '@/pages/AdminUsersPage';
 import AssignStudentsPage from '@/pages/AssignStudentsPage';
 import SupervisorDashboard from '@/pages/SupervisorDashboard';
+import TeacherTestsPage from '@/pages/TeacherTestsPage';
+import StudentTestsPage from '@/pages/StudentTestsPage';
 
 export default function App() {
   return (
@@ -49,6 +51,24 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <SupervisorDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/teacher/tests"
+            element={
+              <ProtectedRoute>
+                <TeacherTestsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/student/tests"
+            element={
+              <ProtectedRoute>
+                <StudentTestsPage />
               </ProtectedRoute>
             }
           />

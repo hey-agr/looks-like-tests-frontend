@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ROLE_COLORS, getRoleLabel } from '@/types/auth';
 import { useI18n } from '@/i18n/I18nProvider';
 import AppLayout from '@/components/AppLayout';
+import AssignModal from '@/components/AssignModal';
 
 import { usersApi } from '@/api/users';
 import type { UserResource } from '@/types/auth';
@@ -9,9 +10,9 @@ import type { UserResource } from '@/types/auth';
 export default function AdminUsersPage() {
   const { t } = useI18n();
   const [users, setUsers] = useState<UserResource[]>([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
 
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
@@ -24,7 +25,6 @@ export default function AdminUsersPage() {
       .getFiltered({ page: 0, size: 200 })
       .then((res) => {
         setUsers(res.data.users || []);
-        setTotal(res.data.totalElements || 0);
       })
       .catch(() => setError(t('users.loadError')))
       .finally(() => setLoading(false));
@@ -50,7 +50,7 @@ export default function AdminUsersPage() {
         <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('common.search')}</h2>
         <div className="flex flex-wrap items-end gap-4">
           <div className="min-w-[200px] flex-1">
-            <label className="block text-sm font-medium text-gray-700">Поиск</label>
+            <label className="block text-sm font-medium text-gray-700">{t('users.search')}</label>
             <input
               type="text"
               value={search}
@@ -60,7 +60,7 @@ export default function AdminUsersPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Роль</label>
+            <label className="block text-sm font-medium text-gray-700">{t('users.roleSelect')}</label>
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
@@ -74,7 +74,7 @@ export default function AdminUsersPage() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Статус</label>
+            <label className="block text-sm font-medium text-gray-700">{t('users.statusSelect')}</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -89,11 +89,17 @@ export default function AdminUsersPage() {
       </div>
 
       <div className="rounded-xl bg-white shadow">
-        <div className="border-b border-gray-200 px-6 py-4">
+        <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900">
             {t('users.title')}{' '}
-            <span className="text-sm font-normal text-gray-500">({filtered.length} из {users.length})</span>
+            <span className="text-sm font-normal text-gray-500">({filtered.length} {t('users.of')} {users.length})</span>
           </h2>
+          <button
+            onClick={() => setIsAssignModalOpen(true)}
+            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            {t('assign.button')}
+          </button>
         </div>
 
         {error && <div className="px-6 py-3 text-sm text-red-600">{error}</div>}
@@ -148,6 +154,10 @@ export default function AdminUsersPage() {
           </div>
         )}
       </div>
+      <AssignModal 
+        isOpen={isAssignModalOpen} 
+        onClose={() => setIsAssignModalOpen(false)} 
+      />
     </div>
     </AppLayout>
   );

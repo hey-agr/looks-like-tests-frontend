@@ -27,23 +27,39 @@ export default function DashboardPage() {
                 className="block rounded-lg border border-gray-200 p-4 hover:border-purple-300 hover:shadow-sm transition"
               >
                 <h3 className="font-medium text-gray-900">{t('users.title')}</h3>
-                <p className="mt-1 text-sm text-gray-500">Управление пользователями</p>
+                <p className="mt-1 text-sm text-gray-500">{t('dashboard.manageUsers')}</p>
               </a>
               <a
                 href="/admin/assignments"
                 className="block rounded-lg border border-gray-200 p-4 hover:border-purple-300 hover:shadow-sm transition"
               >
-                <h3 className="font-medium text-gray-900">Назначения</h3>
-                <p className="mt-1 text-sm text-gray-500">Назначение студентов учителям</p>
+                <h3 className="font-medium text-gray-900">{t('dashboard.assignments')}</h3>
+                <p className="mt-1 text-sm text-gray-500">{t('dashboard.assignStudents')}</p>
               </a>
             </div>
+          ) : primaryRole === 'TEACHER' ? (
+            <a
+              href="/teacher/tests"
+              className="inline-block rounded-lg border border-gray-200 p-4 hover:border-blue-300 hover:shadow-sm transition"
+            >
+              <h3 className="font-medium text-gray-900">{t('tests.title')}</h3>
+              <p className="mt-1 text-sm text-gray-500">{t('dashboard.assignTests')}</p>
+            </a>
+          ) : primaryRole === 'STUDENT' ? (
+            <a
+              href="/student/tests"
+              className="inline-block rounded-lg border border-gray-200 p-4 hover:border-blue-300 hover:shadow-sm transition"
+            >
+              <h3 className="font-medium text-gray-900">{t('tests.title')}</h3>
+              <p className="mt-1 text-sm text-gray-500">{t('dashboard.viewTests')}</p>
+            </a>
           ) : (
             <a
               href="/supervisor"
               className="inline-block rounded-lg border border-gray-200 p-4 hover:border-blue-300 hover:shadow-sm transition"
             >
-              <h3 className="font-medium text-gray-900">Назначения</h3>
-              <p className="mt-1 text-sm text-gray-500">Назначение студентов учителям</p>
+              <h3 className="font-medium text-gray-900">{t('dashboard.assignments')}</h3>
+              <p className="mt-1 text-sm text-gray-500">{t('dashboard.assignStudents')}</p>
             </a>
           )}
         </div>

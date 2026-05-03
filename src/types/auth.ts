@@ -49,10 +49,10 @@ export interface UsersFilter {
 export type UserRole = 'ADMIN' | 'TEACHER' | 'SUPERVISOR' | 'STUDENT';
 
 export const ROLE_LABELS: Record<string, string> = {
-  ADMIN: 'Администратор',
-  TEACHER: 'Учитель',
-  SUPERVISOR: 'Наблюдатель',
-  STUDENT: 'Студент',
+  ADMIN: 'Administrator',
+  TEACHER: 'Teacher',
+  SUPERVISOR: 'Supervisor',
+  STUDENT: 'Student',
 };
 
 export const ROLE_COLORS: Record<string, string> = {
