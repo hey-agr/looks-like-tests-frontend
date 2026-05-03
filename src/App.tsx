@@ -10,6 +10,7 @@ import AssignStudentsPage from '@/pages/AssignStudentsPage';
 import SupervisorDashboard from '@/pages/SupervisorDashboard';
 import TeacherTestsPage from '@/pages/TeacherTestsPage';
 import StudentTestsPage from '@/pages/StudentTestsPage';
+import TestExecutionPage from '@/pages/TestExecutionPage';
 
 export default function App() {
   return (
@@ -69,6 +70,15 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <StudentTestsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/student/tests/:testId"
+            element={
+              <ProtectedRoute>
+                <TestExecutionPage />
               </ProtectedRoute>
             }
           />

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { getRoleLabel, ROLE_COLORS } from '@/types/auth';
+import { getRoleLabel } from '@/types/auth';
 import { useI18n, LanguageSwitcher } from '@/i18n/I18nProvider';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {

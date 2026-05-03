@@ -4,12 +4,14 @@ import type { TestResource } from '@/types/test';
 import { useI18n } from '@/i18n/I18nProvider';
 import AppLayout from '@/components/AppLayout';
 import TestAssignModal from '@/components/TestAssignModal';
+import CreateTestModal from '@/components/CreateTestModal';
 
 export default function TeacherTestsPage() {
   const { t } = useI18n();
   const [tests, setTests] = useState<TestResource[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const loadTests = () => {
     setLoading(true);
@@ -31,12 +33,20 @@ export default function TeacherTestsPage() {
             <h2 className="text-lg font-semibold text-gray-900">
               {t('tests.title')}
             </h2>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-            >
-              {t('assign.button')}
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                {t('tests.create')}
+              </button>
+              <button
+                onClick={() => setIsAssignModalOpen(true)}
+                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              >
+                {t('assign.button')}
+              </button>
+            </div>
           </div>
           {loading ? (
             <div className="flex items-center justify-center py-12">
@@ -73,8 +83,13 @@ export default function TeacherTestsPage() {
           )}
         </div>
         <TestAssignModal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
+          isOpen={isAssignModalOpen} 
+          onClose={() => setIsAssignModalOpen(false)} 
+        />
+        <CreateTestModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onSuccess={loadTests}
         />
       </div>
     </AppLayout>

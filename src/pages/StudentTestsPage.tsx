@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { studentsApi } from '@/api/students';
 import type { StudentTestAssignationResource, StudentTestHistoryResource } from '@/types/test';
 import { useI18n } from '@/i18n/I18nProvider';
@@ -6,6 +7,7 @@ import AppLayout from '@/components/AppLayout';
 
 export default function StudentTestsPage() {
   const { t } = useI18n();
+  const navigate = useNavigate();
   const [assignations, setAssignations] = useState<StudentTestAssignationResource[]>([]);
   const [results, setResults] = useState<StudentTestHistoryResource[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,6 +53,7 @@ export default function StudentTestsPage() {
                     <th className="px-6 py-3 font-medium text-gray-600">{t('assign.test')}</th>
                     <th className="px-6 py-3 font-medium text-gray-600">{t('common.description')}</th>
                     <th className="px-6 py-3 font-medium text-gray-600 text-center">{t('common.attempts')}</th>
+                    <th className="px-6 py-3 font-medium text-gray-600 text-right">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -59,11 +62,19 @@ export default function StudentTestsPage() {
                       <td className="px-6 py-4 font-medium text-gray-900">{item.name}</td>
                       <td className="px-6 py-4 text-gray-700">{item.description || '—'}</td>
                       <td className="px-6 py-4 text-gray-700 text-center">{item.attempts}</td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          onClick={() => navigate(`/student/tests/${item.testId}`)}
+                          className="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-blue-700"
+                        >
+                          {t('tests.start')}
+                        </button>
+                      </td>
                     </tr>
                   ))}
                   {assignations.length === 0 && (
                     <tr>
-                      <td colSpan={3} className="px-6 py-12 text-center text-gray-500">
+                      <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
                         {t('tests.noTests')}
                       </td>
                     </tr>
