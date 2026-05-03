@@ -3,6 +3,7 @@ import { usersApi } from '@/api/users';
 import { assignationsApi } from '@/api/assignations';
 import type { UserResource } from '@/types/auth';
 import { useI18n } from '@/i18n/I18nProvider';
+import { showToast } from '@/components/Toast';
 import AppLayout from '@/components/AppLayout';
 
 export default function AssignStudentsPage() {
@@ -13,8 +14,6 @@ export default function AssignStudentsPage() {
   const [selectedTeacher, setSelectedTeacher] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [success, setSuccess] = useState('');
-  const [error, setError] = useState('');
 
   useEffect(() => {
     Promise.all([
@@ -29,7 +28,7 @@ export default function AssignStudentsPage() {
           (teachersRes.data.users || []).filter((u: UserResource) => u.authorities?.includes('TEACHER'))
         );
       })
-      .catch(() => setError(t('assign.loadError')))
+      .catch(() => showToast(t('assign.loadError'), 'error'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -43,11 +42,11 @@ export default function AssignStudentsPage() {
         studentId: parseInt(selectedStudent),
         teacherId: parseInt(selectedTeacher),
       });
-      setSuccess(t('assign.success'));
+      showToast(t('assign.success'), 'success');
       setSelectedStudent('');
       setSelectedTeacher('');
     } catch {
-      setError(t('assign.error'));
+      showToast(t('assign.error'), 'error');
     } finally {
       setSaving(false);
     }
@@ -69,12 +68,7 @@ export default function AssignStudentsPage() {
       <div className="rounded-xl bg-white p-6 shadow">
         <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('assign.title')}</h2>
 
-        {success && (
-          <div className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-700">{success}</div>
-        )}
-        {error && (
-          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</div>
-        )}
+
 
         <div className="space-y-4">
           <div>
