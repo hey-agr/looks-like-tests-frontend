@@ -206,7 +206,10 @@ export default function CreateTestModal({ isOpen, onClose, onSuccess }: CreateTe
               {q.type !== 'WRITING' && (
                 <div className="space-y-3 pl-4 border-l-2 border-gray-100">
                   <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-gray-700">{t('tests.options')}</label>
+                    <div className="flex flex-col">
+                      <label className="text-sm font-medium text-gray-700">{t('tests.options')}</label>
+                      <span className="text-[10px] text-gray-400 uppercase tracking-wider">{t('tests.markCorrect')}</span>
+                    </div>
                     <button
                       type="button"
                       onClick={() => addOption(qIndex)}
@@ -216,21 +219,41 @@ export default function CreateTestModal({ isOpen, onClose, onSuccess }: CreateTe
                     </button>
                   </div>
                   {q.answers.map((opt, oIndex) => (
-                    <div key={oIndex} className="flex items-center gap-3">
-                      <input
-                        type={q.type === 'OPTIONS' ? 'radio' : 'checkbox'}
-                        checked={opt.rightAnswer}
-                        onChange={(e) => updateOption(qIndex, oIndex, 'rightAnswer', e.target.checked)}
-                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
+                    <div key={oIndex} className={`flex items-center gap-3 rounded-lg p-1 transition-colors ${opt.rightAnswer ? 'bg-green-50' : ''}`}>
+                      <div className="relative flex items-center justify-center">
+                        <input
+                          type={q.type === 'OPTIONS' ? 'radio' : 'checkbox'}
+                          checked={opt.rightAnswer}
+                          onChange={(e) => updateOption(qIndex, oIndex, 'rightAnswer', e.target.checked)}
+                          className={`h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-green-500 transition-all ${
+                            opt.rightAnswer ? 'scale-110 border-green-500' : ''
+                          }`}
+                        />
+                        {opt.rightAnswer && (
+                          <div className="absolute pointer-events-none text-white">
+                            <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
                       <input
                         type="text"
                         required
                         placeholder={t('tests.optionName')}
-                        className="flex-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+                        className={`flex-1 rounded-lg border px-3 py-1.5 text-sm transition-all focus:outline-none ${
+                          opt.rightAnswer 
+                            ? 'border-green-300 bg-white focus:border-green-500 focus:ring-1 focus:ring-green-500' 
+                            : 'border-gray-200 focus:border-blue-500'
+                        }`}
                         value={opt.name}
                         onChange={(e) => updateOption(qIndex, oIndex, 'name', e.target.value)}
                       />
+                      {opt.rightAnswer && (
+                        <span className="hidden md:inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-medium text-green-700 uppercase">
+                          {t('tests.correct')}
+                        </span>
+                      )}
                       <button
                         type="button"
                         onClick={() => removeOption(qIndex, oIndex)}

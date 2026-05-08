@@ -30,7 +30,16 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const t = useCallback(
-    (key: string): string => translations[locale]?.[key] ?? translations.en?.[key] ?? key,
+    (key: string): string => {
+      const translation = translations[locale]?.[key] ?? translations.en?.[key];
+      if (translation) return translation;
+      
+      // Fallback: return prettified key if it starts with 'tests.status.'
+      if (key.startsWith('tests.status.')) {
+        return key.split('.').pop()?.replace(/_/g, ' ') ?? key;
+      }
+      return key;
+    },
     [locale],
   );
 
